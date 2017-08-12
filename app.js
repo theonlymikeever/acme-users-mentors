@@ -4,6 +4,7 @@ const nunjucks = require('nunjucks');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const path = require('path');
 
 //instance and config
 const app = express();
@@ -11,14 +12,16 @@ nunjucks.configure('views', { noCache: true });
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
-//middleware
+//middleware and static routes
 app.use(morgan('dev'));
-app.use(bodyParser.urelencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
-app.use('/', './routes/');
+app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-//static routes
+//**next to take a look at
+app.use('/', require('./routes/'));
 
 //error handling
 app.use('/', (err, req, res, next) => {
