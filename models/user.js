@@ -23,7 +23,10 @@ User.findUsersViewModel = () => {
     include : [Awards]
   })
   .then((results) => {
-      // console.log(results)
+      results.forEach((item) =>{
+        console.log(item)
+        item.awardAmount = (Object.keys(item.awards))
+      })
       return results
     })
     .catch((err) => {
@@ -43,6 +46,22 @@ User.count = () => {
     });
 }
 
+// User.prototype.awardCount = (userId) => {
+//   return Awards.findAll({
+//     where: {
+//       userId : userId
+//     }
+//   })
+//   .then((results) => {
+//     let count = Object.keys(results).length
+//     console.log(count)
+//     return count;
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
+// }
+
 User.destroyById = (id) => {
   return User.destroy({
     where: { id : id }
@@ -52,8 +71,17 @@ User.destroyById = (id) => {
   })
 }
 
-User.updateUserFromRequestBody = () => {
-
+User.updateUserFromRequestBody = (id, body) => {
+  console.log('here')
+  console.log(body)
+    let awards = results.forEach((item) => {
+    if (item.awards.length > 0){
+      item.awards.forEach((award) => {
+        console.log('****')
+        console.log(award.award)
+      })
+    }
+  })
 }
 
 User.generateAward = (id) => {

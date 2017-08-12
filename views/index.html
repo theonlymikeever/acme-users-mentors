@@ -2,20 +2,9 @@
 
 {% block content %}
 <div class="well">
-<!--   <form action="/users" method="post">
-    <div class="form-group">
-      <input class="form-control" name="name" placeholder="name">
-    </div>
-    <div class="check-box">
-      <label for="isManager">Is Manager</label>
-      <input type="checkbox" id="manager" name="manager">
-    </div>
-    <button class="btn btn-primary">Save</button>
-  </form>
- -->
-   <p>Welcome to index</p>
-   <p>What's in your database:</p>
-  <ul class="list-unstyled">
+   <h2>Welcome to index</h2>
+   <p>Here's the users in your database:</p>
+  <ul>
       <!-- PLACEHOLDER LIST OF PAGES -->
       {% for user in users %}
       <li>
@@ -24,5 +13,13 @@
       {% endfor %}
   </ul>
  </div>
+<div class="well">
+       <form action="/users" method="post">
+    <div class="form-group">
+      <input class="form-control" name="name" placeholder="name">
+    </div>
+    <button class="btn btn-primary btn-xs">Add User</button>
+  </form>
+</div>
 
 {% endblock %}

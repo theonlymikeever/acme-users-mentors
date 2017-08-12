@@ -47,7 +47,20 @@
           <form method="post" action="users/{{ user.id }}?_method=DELETE"">
             <button class="btn btn-danger btn-block">Delete</button>
           </form>
+          <p>test award count: {{ user.awardAmount }}</p>
+          {% if user.awards.length >= 2 %}
+          <!-- If mentor availablity logic needed -->
+          <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
+            <div class="form-group">
+            <select class="form-control" name="mentorId">
+                <!-- value is mentorID -->
+                <option value="8">shep</option>
 
+            </select>
+            </div>
+            <button class="btn btn-primary btn-sm">Set as mentor</button>
+          </form>
+          {% endif %}
         </div>
       </div>
      </div>
