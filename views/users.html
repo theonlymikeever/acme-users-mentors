@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Users</h2>
+<div class="well">
+       <form action="/users" method="post">
+    <div class="form-group">
+      <input class="form-control" name="name" placeholder="name">
+    </div>
+    <button class="btn btn-primary btn-xs">Add User</button>
+  </form>
+</div>
+<div class="well">
+   <div class="row">
+   {% for user in users %}
+    <!-- **NOTES::
+      -fix coloumns in mobile!!
+      -swap colors for each type of person
+    -->
+     <div class="col-xs-4 col-sm-4 col-md-4">
+         <!-- panel heading for name -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ user.name }}</h3>
+        </div>
+        <!-- pannel content for awards and actions -->
+        <div class="panel-body">
+          <form method="post" action="users/{{ user.id }}?_method=DELETE"">
+          <button class="btn btn-danger btn-block">Delete</button>
+          </form>
+
+        </div>
+      </div>
+     </div>
+
+   {% endfor %}
+
+   </div>
+ </div>
+
+{% endblock %}

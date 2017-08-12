@@ -18,11 +18,34 @@ const User = db.define('user', {
 
 //class methods
 User.findUsersViewModel = () => {
-
+  return User.findAll()
+    .then((results) => {
+      // console.log(results)
+      return results
+    })
+    .catch((err) => {
+      console.log(err)
+    });
 }
 
-User.destoryById = () => {
+User.count = () => {
+  return User.findAll()
+    .then((results) => {
+      let count = Object.keys(results).length;
+      return count
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+}
 
+User.destroyById = (id) => {
+  return User.destroy({
+    where: { id : id }
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 }
 
 User.updateUserFromRequestBody = () => {
@@ -37,6 +60,10 @@ User.removeAward = () => {
 
 }
 
+// instance method
+User.prototype.create = (name) => {
+  return db.models.User.create({ name: name })
+}
 
 //exports
 module.exports = User;

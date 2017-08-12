@@ -8,22 +8,20 @@ var User = models.User;
 router.use('/', (req, res, next) => {
 
   //for testing only, remove before launch
-  const UserData =
-      User.findAll()
-        .then((results) => {
-          console.log(results.dataValues)
-          return results.dataValues
-        })
-        .catch(next);
-    const AwardsData =
-      Awards.findAll()
-        .then((results) => {
-          // console.log()
-          return results.dataValues
-        })
-        .catch(next);
+    let findUsers = User.findAll();
+    let findAwards = Awards.findAll();
 
-  res.render('index', { UserData, AwardsData });
+    Promise.all([
+      findUsers, findAwards
+    ])
+    .then((results) => {
+      let UserData = results[0];
+      let AwardData = results[1];
+      res.render('index', { users: UserData, awards: AwardData, nav: 'home'});
+    })
+    .catch(next);
+
+  // res.render('index', { UserData });
 });
 
 //export

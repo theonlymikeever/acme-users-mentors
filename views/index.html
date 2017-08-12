@@ -15,7 +15,14 @@
  -->
    <p>Welcome to index</p>
    <p>What's in your database:</p>
-   <p>{{ UserData }}</p>
+  <ul class="list-unstyled">
+      <!-- PLACEHOLDER LIST OF PAGES -->
+      {% for user in users %}
+      <li>
+          {{ user.name }}
+      </li>
+      {% endfor %}
+  </ul>
  </div>
 
 {% endblock %}

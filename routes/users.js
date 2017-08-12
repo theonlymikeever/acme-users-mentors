@@ -1,6 +1,6 @@
 // requires
 const router = require('express').Router();
-const models = require('../db').models;
+const models = require('../models/');
 const User = models.User;
 
 //util
@@ -13,8 +13,8 @@ const redirect = (res)=> {
 //READ
 router.get('/', (req, res, next)=> {
   User.findUsersViewModel()
-    .then(( viewModel )=> {
-      res.render('users', viewModel);
+    .then(( users )=> {
+      res.render('users', { users, nav: 'users' });
     })
     .catch(next);
 });
