@@ -4,6 +4,7 @@ const faker = require('faker');
 //pull in DB
 const db = require('./db');
 const Sequelize = db.Sequelize;
+const Awards = require('./awards');
 
 const User = db.define('user', {
   name: {
@@ -18,14 +19,17 @@ const User = db.define('user', {
 
 //class methods
 User.findUsersViewModel = () => {
-  return User.findAll()
-    .then((results) => {
+  return User.findAll({
+    include : [Awards]
+  })
+  .then((results) => {
       // console.log(results)
       return results
     })
     .catch((err) => {
       console.log(err)
     });
+
 }
 
 User.count = () => {
@@ -52,12 +56,23 @@ User.updateUserFromRequestBody = () => {
 
 }
 
-User.generateAward = () => {
-
+User.generateAward = (id) => {
+  return Awards.create({ award: faker.company.catchPhrase(), userId: id})
+    .catch((err) => {
+      console.log(err)
+    });
 }
 
-User.removeAward = () => {
-
+User.removeAward = (userId, awardId) => {
+  return Awards.destroy({
+    where: {
+      userId: userId,
+      id: awardId
+    }
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
 }
 
 // instance method

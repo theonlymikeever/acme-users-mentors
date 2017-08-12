@@ -5,6 +5,7 @@ const Awards = require('./awards');
 
 //association
 Awards.belongsTo(User, {as: 'user'});
+User.hasMany(Awards);
 
 //sync and seed
 const sync = () => {

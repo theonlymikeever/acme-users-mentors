@@ -25,8 +25,27 @@
         </div>
         <!-- pannel content for awards and actions -->
         <div class="panel-body">
+        {% if user.awards.length %}
+          <p><strong>Awards</strong></p>
+        {% endif %}
+        <ol>
+        {% for award in user.awards %}
+          <li>{{ award.award }}
+              <form method="post" action="users/{{ user.id }}/awards/{{ award.id }}?_method=DELETE">
+                <button class="btn btn-warning btn-xs">
+                  Revoke Award
+                </button>
+              </form>
+          </li>
+        {% endfor %}
+        </ol>
+        <!-- Give award -->
+          <form method="post" action="users/{{ user.id }}/awards">
+            <button class="btn btn-danger btn-block btn-success">Give Award</button>
+          </form>
+        <!-- Delete user -->
           <form method="post" action="users/{{ user.id }}?_method=DELETE"">
-          <button class="btn btn-danger btn-block">Delete</button>
+            <button class="btn btn-danger btn-block">Delete</button>
           </form>
 
         </div>
