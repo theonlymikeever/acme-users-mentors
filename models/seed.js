@@ -8,7 +8,7 @@ module.exports = (User, Awards) => {
   return Promise.all([
     User.create({ name: 'Ash' }),
     User.create({ name: 'Misty' }),
-    User.create({ name: 'Brock', mentorId: 1})
+    User.create({ name: 'Brock' })
   ])
   .then(([_ash, _misty, _brock]) => {
     ash = _ash;

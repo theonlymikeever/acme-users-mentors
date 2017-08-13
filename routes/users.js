@@ -14,11 +14,8 @@ const redirect = (res)=> {
 //READ
 router.get('/', (req, res, next)=> {
   User.findUsersViewModel()
-    .then(( results )=> {
-      let users = results[0];
-      let possibleMentorees = results[1];
-      console.log(users.mentorId)
-      res.render('users', { users, possibleMentorees, nav: 'users' });
+    .then(( users )=> {
+      res.render('users', { users, nav: 'users' });
     })
     .catch(next);
 });

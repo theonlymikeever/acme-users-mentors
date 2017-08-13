@@ -11,32 +11,19 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  beingMentored: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
+  mentorId: {
+    type: Sequelize.INTEGER,
+    allowNull: true
   },
-  isMentor: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
-  }
+  // isMentor: {
+  //   type: Sequelize.BOOLEAN,
+  //   defaultValue: false
+  // }
 });
 
 
 //class methods
 User.findUsersViewModel = () => {
-  let allUsers = User.findAll({
-    include: [{ model: User, as: 'mentor' }, { model: Awards }]
-  })
-
-  let possibleMentorees = User.findAll({
-    where: { isMentor: false }
-  })
-
-  return Promise.all([allUsers, possibleMentorees])
-// .then((results) => {
-//   console.log(results)
-// })
-
 return User.findAll({
     include: [{ model: User, as: 'mentor' }, { model: Awards }]
   })
@@ -91,15 +78,13 @@ User.destroyById = (id) => {
   })
 }
 
-User.updateUserFromRequestBody = (id, body) => {
-  let updateMentoree = User.update({ mentorId: id, beingMentored: true }, { where: { id: body.updateId }})
+User.updateUserFromRequestBody = (mentoreeId, body) => {
 
-  let updateMentor = User.update({ isMentor: true }, { where: { id: id } })
-
-    return Promise.all([updateMentor, updateMentoree])
-    .catch((err) => {
-      console.log(err)
-    })
+  if(body.updateId === null) {
+   return User.set({ mentorId: null }, { where: { id: mentoreeId }})
+  }
+  console.log(mentoreeId,body)
+ return User.update({ mentorId: body.updateId }, { where: { id: mentoreeId }})
 }
 
 User.generateAward = (id) => {

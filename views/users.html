@@ -44,23 +44,33 @@
           </li>
         {% endfor %}
         </ol>
+
         <!-- Give award -->
           <form method="post" action="users/{{ user.id }}/awards">
             <button class="btn btn-danger btn-block btn-success">Give Award</button>
           </form>
+
         <!-- Delete user -->
           <form method="post" action="users/{{ user.id }}?_method=DELETE"">
-            <button class="btn btn-danger btn-block">Delete</button>
+            <button class="btn btn-danger btn-block">Delete User</button>
           </form>
-          <!-- check for award count -->
-          <p>{{user.mentorId}}</p>
-          {% if user.mentorId === null %}
+
+          <!-- Remove Mentor -->
+          {% if user.mentorId %}
+           <form method="POST" action="/users/{{ user.id }}?_method=PUT"">
+           <!-- <input type="hidden" name="updateId"> -->
+              <button value="null" name="updateId" type="submit" class="btn btn-warning btn-block">Remove Mentor</button>
+            </form>
+          {% endif %}
+
+          <!-- Possible mentor list -->
+          {% if not user.mentorId %}
             <!-- check if there are any possible mentorees -->
             <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
               <div class="form-group">
               <select class="form-control" name="updateId">
                   {% for person in users %}
-                    {% if (person.name != user.name) and (person.mentor.name === null) and (person.awards.length >=2 )%}
+                    {% if (person.awards.length >= 2) and (person.name != user.name) %}
                     <option value="{{ person.id }}">{{ person.name }}</option>
                     {% endif %}
                   {% endfor %}
