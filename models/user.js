@@ -95,6 +95,8 @@ User.generateAward = (id) => {
 }
 
 User.removeAward = (userId, awardId) => {
+  //may need to add instance where user has their awards
+  //revoked and can no longer be a mentor
   return Awards.destroy({
     where: {
       userId: userId,
