@@ -22,6 +22,11 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">{{ user.name }}</h3>
+          {% if user.mentor %}
+          <div class="label label-default">
+          Mentored by: {{ user.mentor.name }}
+          </div>
+          {% endif %}
         </div>
         <!-- pannel content for awards and actions -->
         <div class="panel-body">
@@ -47,19 +52,22 @@
           <form method="post" action="users/{{ user.id }}?_method=DELETE"">
             <button class="btn btn-danger btn-block">Delete</button>
           </form>
-          <p>test award count: {{ user.awardAmount }}</p>
-          {% if user.awards.length >= 2 %}
-          <!-- If mentor availablity logic needed -->
-          <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
-            <div class="form-group">
-            <select class="form-control" name="mentorId">
-                <!-- value is mentorID -->
-                <option value="8">shep</option>
-
-            </select>
-            </div>
-            <button class="btn btn-primary btn-sm">Set as mentor</button>
-          </form>
+          <!-- check for award count -->
+          <p>{{user.mentorId}}</p>
+          {% if user.mentorId === null %}
+            <!-- check if there are any possible mentorees -->
+            <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
+              <div class="form-group">
+              <select class="form-control" name="updateId">
+                  {% for person in users %}
+                    {% if (person.name != user.name) and (person.mentor.name === null) and (person.awards.length >=2 )%}
+                    <option value="{{ person.id }}">{{ person.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+              </select>
+              </div>
+              <button class="btn btn-primary btn-sm">Set as mentor</button>
+            </form>
           {% endif %}
         </div>
       </div>

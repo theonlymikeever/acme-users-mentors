@@ -11,27 +11,63 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  status: {
-    type: Sequelize.STRING
+  beingMentored: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   },
+  isMentor: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
 });
 
 
 //class methods
 User.findUsersViewModel = () => {
-  return User.findAll({
-    include : [Awards]
+  let allUsers = User.findAll({
+    include: [{ model: User, as: 'mentor' }, { model: Awards }]
   })
-  .then((results) => {
-      results.forEach((item) =>{
-        console.log(item)
-        item.awardAmount = (Object.keys(item.awards))
-      })
-      return results
-    })
-    .catch((err) => {
-      console.log(err)
-    });
+
+  let possibleMentorees = User.findAll({
+    where: { isMentor: false }
+  })
+
+  return Promise.all([allUsers, possibleMentorees])
+// .then((results) => {
+//   console.log(results)
+// })
+
+return User.findAll({
+    include: [{ model: User, as: 'mentor' }, { model: Awards }]
+  })
+
+  // return User.findAll({
+  //   include : [Awards]
+  // })
+  // .then((results) => {
+  //   //add our record award amount for future logic
+  //     results.forEach((item) => {
+  //       if (item.mentorId != null){
+  //          User.findAll({
+  //           where: {
+  //             id : item.mentorId
+  //           }
+  //         })
+  //         .then((foundMentor) => {
+  //           console.log(item.name + "'s mentor is " + foundMentor[0].name)
+  //           item.mentorName = foundMentor[0].name;
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         })
+  //       }
+  //       item.awardAmount = Object.keys(item.awards).length
+  //     })
+  //     return results
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   });
 
 }
 
@@ -46,22 +82,6 @@ User.count = () => {
     });
 }
 
-// User.prototype.awardCount = (userId) => {
-//   return Awards.findAll({
-//     where: {
-//       userId : userId
-//     }
-//   })
-//   .then((results) => {
-//     let count = Object.keys(results).length
-//     console.log(count)
-//     return count;
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
-// }
-
 User.destroyById = (id) => {
   return User.destroy({
     where: { id : id }
@@ -72,16 +92,14 @@ User.destroyById = (id) => {
 }
 
 User.updateUserFromRequestBody = (id, body) => {
-  console.log('here')
-  console.log(body)
-    let awards = results.forEach((item) => {
-    if (item.awards.length > 0){
-      item.awards.forEach((award) => {
-        console.log('****')
-        console.log(award.award)
-      })
-    }
-  })
+  let updateMentoree = User.update({ mentorId: id, beingMentored: true }, { where: { id: body.updateId }})
+
+  let updateMentor = User.update({ isMentor: true }, { where: { id: id } })
+
+    return Promise.all([updateMentor, updateMentoree])
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 User.generateAward = (id) => {

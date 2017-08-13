@@ -6,6 +6,7 @@ const Awards = require('./awards');
 //association
 Awards.belongsTo(User, {as: 'user'});
 User.hasMany(Awards);
+User.belongsTo(User, { as: 'mentor', foreignKey: 'mentorId'});
 
 //sync and seed
 const sync = () => {
