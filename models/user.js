@@ -10,17 +10,8 @@ const User = db.define('user', {
   name: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  mentorId: {
-    type: Sequelize.INTEGER,
-    allowNull: true
-  },
-  // isMentor: {
-  //   type: Sequelize.BOOLEAN,
-  //   defaultValue: false
-  // }
-});
-
+  }
+})
 
 //class methods
 User.findUsersViewModel = () => {
@@ -78,13 +69,28 @@ User.destroyById = (id) => {
   })
 }
 
-User.updateUserFromRequestBody = (mentoreeId, body) => {
-
-  if(body.updateId === null) {
-   return User.set({ mentorId: null }, { where: { id: mentoreeId }})
-  }
-  console.log(mentoreeId,body)
- return User.update({ mentorId: body.updateId }, { where: { id: mentoreeId }})
+User.updateUserFromRequestBody = (userId, body) => {
+  let mentorId = body.mentorId
+  return User.findOne({
+      where: {
+        id: userId
+      }
+    })
+    .then((userResult) => {
+      if (!mentorId) {
+        userResult.setMentor(null)
+      } else {
+        return User.findOne({where:{
+          id: mentorId
+        }})
+        .then((foundMentor) => {
+          userResult.setMentor(foundMentor)
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 User.generateAward = (id) => {

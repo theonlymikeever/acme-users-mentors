@@ -36,6 +36,7 @@
         <ol>
         {% for award in user.awards %}
           <li>{{ award.award }}
+                <!-- delete award -->
               <form method="post" action="users/{{ user.id }}/awards/{{ award.id }}?_method=DELETE">
                 <button class="btn btn-warning btn-xs">
                   Revoke Award
@@ -59,7 +60,7 @@
           {% if user.mentorId %}
            <form method="POST" action="/users/{{ user.id }}?_method=PUT"">
            <!-- <input type="hidden" name="updateId"> -->
-              <button value="null" name="updateId" type="submit" class="btn btn-warning btn-block">Remove Mentor</button>
+              <button value="null" name="mentorId" type="submit" class="btn btn-warning btn-block">Remove Mentor</button>
             </form>
           {% endif %}
 
@@ -68,7 +69,7 @@
             <!-- check if there are any possible mentorees -->
             <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
               <div class="form-group">
-              <select class="form-control" name="updateId">
+              <select class="form-control" name="mentorId">
                   {% for person in users %}
                     {% if (person.awards.length >= 2) and (person.name != user.name) %}
                     <option value="{{ person.id }}">{{ person.name }}</option>
