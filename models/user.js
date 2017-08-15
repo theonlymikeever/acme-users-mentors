@@ -18,34 +18,14 @@ User.findUsersViewModel = () => {
 return User.findAll({
     include: [{ model: User, as: 'mentor' }, { model: Awards }]
   })
+  // .then((allUsers) => {
+  //     //check to make sure everyone who is a mentor, qualifies
+  //     // allUsers.forEach(function(user) {
+  //     //   if (user.awards.length < 2) {
 
-  // return User.findAll({
-  //   include : [Awards]
-  // })
-  // .then((results) => {
-  //   //add our record award amount for future logic
-  //     results.forEach((item) => {
-  //       if (item.mentorId != null){
-  //          User.findAll({
-  //           where: {
-  //             id : item.mentorId
-  //           }
-  //         })
-  //         .then((foundMentor) => {
-  //           console.log(item.name + "'s mentor is " + foundMentor[0].name)
-  //           item.mentorName = foundMentor[0].name;
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         })
-  //       }
-  //       item.awardAmount = Object.keys(item.awards).length
-  //     })
-  //     return results
+  //     //   }
+  //     // })
   //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   });
 
 }
 
@@ -109,6 +89,9 @@ User.removeAward = (userId, awardId) => {
       id: awardId
     }
   })
+  // .then((results) => {
+
+  // })
   .catch((err) =>{
     console.log(err)
   })
@@ -117,6 +100,19 @@ User.removeAward = (userId, awardId) => {
 // instance method
 User.prototype.create = (name) => {
   return db.models.User.create({ name: name })
+}
+
+User.prototype.getMentorees = function() {
+  return User.findAll({ where: {
+    mentorId : this.id
+  }})
+  .then((results) => {
+    console.log(results)
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
+
 }
 
 //exports
