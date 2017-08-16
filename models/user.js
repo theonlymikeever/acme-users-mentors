@@ -102,17 +102,20 @@ User.prototype.create = (name) => {
   return db.models.User.create({ name: name })
 }
 
-User.prototype.getMentorees = function() {
-  return User.findAll({ where: {
-    mentorId : this.id
-  }})
+User.getEligibleMentors = function() {
+  return User.findAll({
+    include: [{ model: Awards }]
+  })
   .then((results) => {
-    console.log(results)
+    // console.log(results)
+    let names = []
+     results.forEach(function(user){
+      if (user.awards.length >= 2){
+        names.push(user.name)
+      }
+    })
+    return names
   })
-  .catch((err) =>{
-    console.log(err)
-  })
-
 }
 
 //exports

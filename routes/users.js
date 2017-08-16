@@ -15,7 +15,11 @@ const redirect = (res)=> {
 router.get('/', (req, res, next)=> {
   User.findUsersViewModel()
     .then(( users )=> {
-      res.render('users', { users, nav: 'users' });
+      User.getEligibleMentors()
+      .then((eligibleMentors) => {
+        res.render('users', { users, eligibleMentors, nav: 'users' })
+      })
+      ;
     })
     .catch(next);
 });
@@ -27,21 +31,6 @@ router.post('/', (req, res, next)=> {
     .catch(next);
 });
 
-
-// router.post('/', (req, res, next)=> {
-//   User.create(req.body)
-//     .then((res) => {
-//       let location = req.headers.referer.split(req.host)[1]
-//       // console.log(location.indexOf('users'));
-//       if (location.indexOf('users') < 0){
-//         res.redirect();
-//       } else {
-//         console.log('else')
-//         res.redirect(res)
-//       }
-//     })
-//     .catch(next);
-// });
 
 //DELETE
 router.delete('/:id', (req, res, next)=> {
