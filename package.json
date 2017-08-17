@@ -17,6 +17,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "DATABASE_URL=postgres://localhost/acme_users_mentorsDB node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "DATABASE_URL=postgres://localhost/acme_users_mentorsDB nodemon index.js",
     "test:dev": "DATABASE_URL=postgres://localhost/acme_users_mentorsDB ./node_modules/mocha/bin/mocha --recursive --watch"

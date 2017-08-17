@@ -2,8 +2,14 @@
 
 {% block content %}
 <div class="well">
-   <h2>Welcome to index</h2>
-   <p>Here's the users in your database:</p>
+   <h3>Welcome to index</h3>
+   <p>This project is a demonstration of Sequelize model association through a Postgres DB. Model relationship is as follows:</p>
+   <p><code>Awards.belongsTo(User, {as: 'user'});</code></p>
+   <p><code>User.hasMany(Awards);</code></p>
+   <p><code>User.belongsTo(User, { as: 'mentor'});</code></p>
+   <p><code>User.hasMany(User, { as: 'mentorees', foreignKey: 'mentorId'});</code></p>
+   <hr>
+   <p>Here's the users currently in your database:</p>
   <ul>
       <!-- PLACEHOLDER LIST OF PAGES -->
       {% for user in users %}
