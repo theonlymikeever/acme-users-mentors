@@ -57,6 +57,9 @@ router.post('/:id/awards', (req, res, next)=> {
 router.delete('/:userId/awards/:id', (req, res, next)=> {
   User.removeAward(req.params.userId, req.params.id)
     .then(redirect(res))
+    // .then((results) =>{
+    //   console.log(results)
+    // })
     .catch( next);
 });
 

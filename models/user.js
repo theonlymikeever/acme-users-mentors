@@ -18,15 +18,9 @@ User.findUsersViewModel = () => {
 return User.findAll({
     include: [{ model: User, as: 'mentor' }, { model: Awards }]
   })
-  // .then((allUsers) => {
-  //     //check to make sure everyone who is a mentor, qualifies
-  //     // allUsers.forEach(function(user) {
-  //     //   if (user.awards.length < 2) {
-
-  //     //   }
-  //     // })
-  //   })
-
+  .catch((err) =>{
+    console.log(err)
+  })
 }
 
 User.count = () => {
@@ -81,25 +75,39 @@ User.generateAward = (id) => {
 }
 
 User.removeAward = (userId, awardId) => {
-  //may need to add instance where user has their awards
-  //revoked and can no longer be a mentor
   return Awards.destroy({
     where: {
       userId: userId,
       id: awardId
     }
   })
-  // .then((results) => {
-
-  // })
+  .then(()=> {
+    return User.findOne({
+      where: {
+        id: userId
+      }, include: [{ model: Awards }]
+    })
+  })
+  .then((user) => {
+    console.log(user.awards.length)
+    if (user.awards.length < 2){
+      //no longer eligible to be a mentor
+      //must find any poor mentorees
+      return User.findAll({
+        where: {
+          mentorId: userId
+        }
+      })
+    }
+  })
+  .then((foundUsers) => {
+    return foundUsers.forEach(function(user) {
+      return user.setMentor(null)
+    })
+  })
   .catch((err) =>{
     console.log(err)
   })
-}
-
-// instance method
-User.prototype.create = (name) => {
-  return db.models.User.create({ name: name })
 }
 
 User.getEligibleMentors = function() {
@@ -116,7 +124,17 @@ User.getEligibleMentors = function() {
     })
     return names
   })
+  .catch((err) =>{
+    console.log(err)
+  })
 }
+
+
+// instance method
+User.prototype.create = (name) => {
+  return db.models.User.create({ name: name })
+}
+
 
 //exports
 module.exports = User;

@@ -63,19 +63,10 @@
               <button type="submit" class="btn btn-warning btn-block">Remove Mentor</button>
             </form>
           {% endif %}
-
-
-          <!-- need to write logic for:
-                  {% for mentor in eligibleMentors %}
-                to replace below
-           -->
-
-
-
           <!-- Possible mentor list -->
-          {% if not user.mentorId %}
+          {% if eligibleMentors.indexOf(user.name) < 0 or eligibleMentors.length > 1 %}
             <!-- check if there are any possible mentorees -->
-            <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well">
+            <form method="POST" action="/users/{{ user.id }}?_method=PUT" class="well {% if (user.mentorId) or eligibleMentors.length === 0 %}hidden{% endif %}">
               <div class="form-group">
               <select class="form-control" name="mentorId">
                   {% for person in users %}
