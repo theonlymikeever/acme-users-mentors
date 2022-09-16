@@ -5,7 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "express": "^4.15.4",
     "faker": "^4.1.0",
     "method-override": "^2.3.9",
